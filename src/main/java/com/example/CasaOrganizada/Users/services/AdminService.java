@@ -30,11 +30,4 @@ public class AdminService {
         user.setRole(UserRole.USER);
         return userRepository.save(user);
     }
-    public void registerUser(RegistrationRequest request) {
-        boolean existUser = userRepository.findByUser(request.getPhoneNumber()).isPresent();
-        if (existUser) {
-            throw new EntityExistsException("User with this phone number already exists");
-        }
-
-    }
 }

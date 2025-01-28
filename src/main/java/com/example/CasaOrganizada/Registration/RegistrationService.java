@@ -9,9 +9,10 @@ public class RegistrationService {
     private UserService userService;
     private UserRepository userRepository;
 
-    public void register(RegistrationRequest request) {
+    public String register(RegistrationRequest request) {
         User user = new AdminUser(request.getName(), request.getPhoneNumber(),
                 request.getPassword(), request.getConfirmPassword());
         userService.registerUser(user);
+        return "";
     }
 }
