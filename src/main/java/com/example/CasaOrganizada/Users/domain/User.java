@@ -21,7 +21,7 @@ import java.util.Collections;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class User implements UserDetails {
+public class User implements UserDetails {
     @Id
     @SequenceGenerator(
             name = "user_sequence",
@@ -61,6 +61,8 @@ public abstract class User implements UserDetails {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+    @Column(name = "user_was_invited", nullable = false)
+    private boolean userWasInvited;
 
     private boolean locked;
     private boolean enabled;
@@ -90,24 +92,25 @@ public abstract class User implements UserDetails {
         return enabled;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
         return Collections.singletonList(authority);
     }
 
-    public User(String name, String phoneNumber, String password, String passwordConfirm) {
+    public User(String name, String phoneNumber, String password, String passwordConfirm, UserRole role) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
+        this.role = role;
     }
 
-    public abstract boolean canRegisterTask();
-    public abstract boolean canObserveTask();
-    public abstract boolean canReceiveTaskNotification();
-    public abstract boolean canEditTask();
-    public abstract boolean canInviteUser();
-    public abstract boolean canEditUser();
-    public abstract boolean canDeleteUser();
+    public UserRole getRoleInvitation() {
+        return userWasInvited ? UserRole.GUEST : UserRole.OWNER;
+    }
 }
