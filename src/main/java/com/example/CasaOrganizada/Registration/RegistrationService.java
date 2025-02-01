@@ -12,7 +12,7 @@ public class RegistrationService {
     public String register(RegistrationRequest request) {
         User user = new AdminUser(request.getName(), request.getPhoneNumber(),
                 request.getPassword(), request.getConfirmPassword());
-        userService.registerUser(user);
+        userService.signUp(user);
         return "";
     }
 }

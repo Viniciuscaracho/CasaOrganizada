@@ -1,7 +1,7 @@
 package com.example.CasaOrganizada.Users.services;
 
-import com.example.CasaOrganizada.Registration.token.Token;
-import com.example.CasaOrganizada.Registration.token.TokenService;
+//import com.example.CasaOrganizada.Registration.token.Token;
+//import com.example.CasaOrganizada.Registration.token.TokenService;
 import com.example.CasaOrganizada.Users.domain.AdminUser;
 import com.example.CasaOrganizada.Users.domain.User;
 import com.example.CasaOrganizada.Users.domain.UserRole;
@@ -23,30 +23,22 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private TokenService tokenService;
 
-    public String registerUser(User user) {
+    public String signUp(User user) {
         boolean userExists = userRepository.findByPhoneNumber(user.getPhoneNumber()).isPresent();
         if (userExists) {
             throw new EntityExistsException("User " + user.getPhoneNumber() + " already exists");
         }
 
-
-
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        UserRole userRole = user.getRoleInvitation();
+        user.setRole(userRole);
+        userRepository.save(user);
 
-        String token = UUID.randomUUID().toString();
-        Token confirmationToken = new Token(
-                token,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(10),
-                user
-        );
-
-        tokenService.saveConfirmationToken(confirmationToken);
-        return token;
+        return "";
     }
 
     @Override

@@ -43,7 +43,7 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String password;
 
-    @Column(unique = true)
+    @Transient
     private String passwordConfirm;
 
     @CreationTimestamp
@@ -92,22 +92,17 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    public UserRole getRole() {
-        return role;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
         return Collections.singletonList(authority);
     }
 
-    public User(String name, String phoneNumber, String password, String passwordConfirm, UserRole role) {
+    public User(String name, String phoneNumber, String password, String passwordConfirm) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
-        this.role = role;
     }
 
     public UserRole getRoleInvitation() {

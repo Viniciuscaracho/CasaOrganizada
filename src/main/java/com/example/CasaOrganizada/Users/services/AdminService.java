@@ -27,7 +27,7 @@ public class AdminService {
     public User editUserByUserName(User user) {
         user.setName(user.getName());
         user.setPhoneNumber(user.getPhoneNumber());
-        user.setRole(UserRole.USER);
+        user.setRole(UserRole.ADMIN);
         return userRepository.save(user);
     }
 }
