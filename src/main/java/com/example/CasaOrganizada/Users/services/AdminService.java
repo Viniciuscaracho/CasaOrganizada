@@ -15,19 +15,14 @@ public class AdminService {
     @Autowired
     private UserRepository userRepository;
 
-    public AdminUser createAdmin(AdminUser admin) {
-        admin.setRole(UserRole.ADMIN);
-        return userRepository.save(admin);
-    }
+//    public User inviteUser(String phoneNumber) {
+//
+//    }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public User editUserByUserName(User user) {
-        user.setName(user.getName());
-        user.setPhoneNumber(user.getPhoneNumber());
-        user.setRole(UserRole.ADMIN);
+    public User editUserByUserName(User user, String userName, String Email, UserRole role) {
+        user.setName(userName);
+        user.setEmail(Email);
+        user.setRole(role);
         return userRepository.save(user);
     }
 }

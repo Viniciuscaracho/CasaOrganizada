@@ -21,6 +21,8 @@ import java.util.Collections;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 public class User implements UserDetails {
     @Id
     @SequenceGenerator(
@@ -38,7 +40,7 @@ public class User implements UserDetails {
     private String name;
 
     @Column(unique = true)
-    private String phoneNumber;
+    private String email;
 
     @Column(unique = true)
     private String password;
@@ -98,9 +100,9 @@ public class User implements UserDetails {
         return Collections.singletonList(authority);
     }
 
-    public User(String name, String phoneNumber, String password, String passwordConfirm) {
+    public User(String name, String email, String password, String passwordConfirm) {
         this.name = name;
-        this.phoneNumber = phoneNumber;
+        this.email = email;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
     }

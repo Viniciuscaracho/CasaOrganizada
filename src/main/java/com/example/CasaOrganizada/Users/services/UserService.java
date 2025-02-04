@@ -1,7 +1,7 @@
 package com.example.CasaOrganizada.Users.services;
 
-//import com.example.CasaOrganizada.Registration.token.Token;
-//import com.example.CasaOrganizada.Registration.token.TokenService;
+import com.example.CasaOrganizada.Registration.Token.ConfirmationToken;
+import com.example.CasaOrganizada.Registration.Token.ConfirmationTokenService;
 import com.example.CasaOrganizada.Users.domain.AdminUser;
 import com.example.CasaOrganizada.Users.domain.User;
 import com.example.CasaOrganizada.Users.domain.UserRole;
@@ -25,25 +25,42 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private ConfirmationTokenService confirmationTokenService;
 
     public String signUp(User user) {
-        boolean userExists = userRepository.findByPhoneNumber(user.getPhoneNumber()).isPresent();
+        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
         if (userExists) {
-            throw new EntityExistsException("User " + user.getPhoneNumber() + " already exists");
+            throw new EntityExistsException("User " + user.getEmail() + " already exists");
         }
 
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        user.setStatus(UserStatus.PENDING);
+
         UserRole userRole = user.getRoleInvitation();
         user.setRole(userRole);
         userRepository.save(user);
+
+        String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+
 
         return "";
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByPhoneNumber(username)
+        return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found"));
     }
 

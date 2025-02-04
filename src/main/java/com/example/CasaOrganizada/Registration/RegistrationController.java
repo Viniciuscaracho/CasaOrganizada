@@ -1,16 +1,20 @@
 package com.example.CasaOrganizada.Registration;
 
-import com.example.CasaOrganizada.Users.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("ap1/v1/register")
+@RequestMapping("/api/v1/registration")
+@AllArgsConstructor
 public class RegistrationController {
     private RegistrationService registrationService;
 
-    public void RegisterUser(@RequestBody RegistrationRequest request) {
-        registrationService.register(request);
+    @PostMapping
+    public ResponseEntity<String> register(@RequestBody RegistrationRequest request) {
+       return registrationService.register(request);
     }
 }

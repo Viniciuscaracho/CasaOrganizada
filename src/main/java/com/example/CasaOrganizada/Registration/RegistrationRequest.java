@@ -11,7 +11,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class RegistrationRequest extends User {
    private final String name;
-   private final String phoneNumber;
+   private final String email;
    private final String password;
    private final String confirmPassword;
    private final UserRole role;
