@@ -29,10 +29,11 @@ public class UserService implements UserDetailsService {
     private ConfirmationTokenService confirmationTokenService;
 
     public String signUp(User user) {
-        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
-        if (userExists) {
-            throw new EntityExistsException("User " + user.getEmail() + " already exists");
-        }
+         userRepository.findByEmail(user.getEmail()).ifPresent(
+                existingUser -> {
+                    throw new IllegalStateException("User " + user.getEmail() + " already exists");
+                }
+        );
 
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
@@ -53,9 +54,7 @@ public class UserService implements UserDetailsService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-
-
-        return "";
+        return token;
     }
 
     @Override

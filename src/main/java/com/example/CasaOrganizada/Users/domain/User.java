@@ -36,13 +36,13 @@ public class User implements UserDetails {
     )
     private Long id;
 
-    @Column(unique = true)
+    @Column
     private String name;
 
     @Column(unique = true)
     private String email;
 
-    @Column(unique = true)
+    @Column
     private String password;
 
     @Transient
