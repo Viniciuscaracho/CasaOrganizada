@@ -2,10 +2,8 @@ package com.example.CasaOrganizada.Registration;
 
 import com.example.CasaOrganizada.Registration.Token.ConfirmationToken;
 import com.example.CasaOrganizada.Registration.Token.ConfirmationTokenService;
-import com.example.CasaOrganizada.Users.domain.AdminUser;
 import com.example.CasaOrganizada.Users.domain.InvalidEmailFormatException;
 import com.example.CasaOrganizada.Users.domain.User;
-import com.example.CasaOrganizada.Users.domain.UserRole;
 import com.example.CasaOrganizada.Users.repository.UserRepository;
 import com.example.CasaOrganizada.Users.services.UserService;
 import com.example.CasaOrganizada.email.EmailSender;
@@ -24,11 +22,12 @@ public class RegistrationService {
     private EmailSender emailSender;
 
     @Autowired
-    public RegistrationService(UserService userService, UserRepository userRepository, EmailValidator emailValidator, ConfirmationTokenService confirmationTokenService) {
+    public RegistrationService(UserService userService, UserRepository userRepository, EmailValidator emailValidator, ConfirmationTokenService confirmationTokenService, EmailSender emailSender) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.emailValidator = emailValidator;
         this.confirmationTokenService = confirmationTokenService;
+        this.emailSender = emailSender;
     }
 
     public ResponseEntity<String> register(RegistrationRequest request) {
